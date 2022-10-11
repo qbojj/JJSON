@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="JJSON_Value_t_">
+    <DisplayString Condition="type == JJSON_null">null</DisplayString>
+    <DisplayString Condition="type == JJSON_bool">{ Bool }</DisplayString>
+    <DisplayString Condition="type == JJSON_number">{ Number }</DisplayString>
+    <DisplayString Condition="type == JJSON_string">{ json->strings[ValueIdx], s8 }</DisplayString>
+    <DisplayString Condition="type == JJSON_array">array { json->arrays[ValueIdx] }</DisplayString>
+    <DisplayString Condition="type == JJSON_object">object { json->objects[ValueIdx] }</DisplayString>
+
+    <DisplayString Optional="true">unknown</DisplayString>
+
+    <StringView Condition="type == JJSON_string">json->strings[ValueIdx], s8</StringView>
+
+    <Expand HideRawView="true">
+      <Item Name="[size]" Condition="type == JJSON_array">json->arrays[ValueIdx].size()</Item>
+      <ArrayItems Condition="type == JJSON_array">
+        <Size>json->arrays[ValueIdx].size()</Size>
+        <ValuePointer>&amp; json->arrays[ValueIdx][0]</ValuePointer>
+      </ArrayItems>
+
+      <LinkedListItems>
+        <Size>json->objects[ValueIdx]._List._Mypair._Myval2._Mysize</Size>
+        <HeadPointer>json->objects[ValueIdx]._List._Mypair._Myval2._Myhead -&gt; _Next</HeadPointer>
+        <NextPointer>_Next</NextPointer>
+        <ValueNode Name="[{_Myval.first}]">_Myval.second</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+  
+  <Type Name="JSONValue">
+    <DisplayString Condition="v">{*v}</DisplayString>
+    <DisplayString Condition="!v">not initialized</DisplayString>
+    <Expand HideRawView="true">
+      <ExpandedItem Condition="v">*v</ExpandedItem>
+    </Expand>
+  </Type>
+</AutoVisualizer>
